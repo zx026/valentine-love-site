@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentine Special ❤️</title>
+
+<style>
+body{
+  margin:0;
+  background:black;
+  overflow:hidden;
+  font-family:monospace;
+  color:white;
+  text-align:center;
+}
+
+/* heart container */
+.heart{
+  position:absolute;
+  top:45%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-45deg);
+  width:330px;
+  height:330px;
+}
+
+.word{
+  position:absolute;
+  color:#ff8fb1;
+  font-size:14px;
+  text-shadow:0 0 10px #fff,0 0 20px #ff4b6e;
+  animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* name */
+.names{
+  position:absolute;
+  top:40px;
+  width:100%;
+  font-size:22px;
+  font-weight:bold;
+  color:#ff4b6e;
+  text-shadow:0 0 15px white;
+}
+
+/* buttons */
+.controls{
+  position:absolute;
+  bottom:30px;
+  width:100%;
+}
+
+input{
+  padding:8px;
+  border-radius:10px;
+  border:none;
+  width:110px;
+}
+
+button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:20px;
+  background:#ff4b6e;
+  color:white;
+  font-weight:bold;
+}
+
+/* popup */
+.popup{
+  position:fixed;
+  inset:0;
+  background:#000000cc;
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.popup-box{
+  background:#ff4b6e;
+  padding:20px;
+  border-radius:15px;
+  max-width:260px;
+}
+canvas{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="names" id="names">❤️ Forever ❤️</div>
+<div class="heart" id="heart"></div>
+
+<div class="controls">
+  <input id="n1" placeholder="Your Name">
+  ❤️
+  <input id="n2" placeholder="Partner">
+  <br>
+  <button onclick="setNames()">Set Love</button>
+  <button onclick="showLetter()">Love Letter 💌</button>
+  <button onclick="share()">Share</button>
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h3>💖 My Love Letter</h3>
+    <p>You are my world ❤️<br>I love you forever 🥰</p>
+    <button onclick="closeLetter()">Close</button>
+  </div>
+</div>
+
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8d2d7f7b8.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<script>
+/* create heart words */
+const heart=document.getElementById("heart");
+
+function addWord(x,y){
+  let span=document.createElement("span");
+  span.className="word";
+  span.innerText="I love you";
+  span.style.left=x+"px";
+  span.style.top=y+"px";
+  heart.appendChild(span);
+}
+
+for(let t=0;t<6.28;t+=0.08){
+ let x=16*Math.pow(Math.sin(t),3);
+ let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+ addWord(150+x*8,150+y*8);
+}
+
+/* names */
+function setNames(){
+  let a=n1.value||"Me";
+  let b=n2.value||"You";
+  document.getElementById("names").innerText=a+" ❤️ "+b;
+  startConfetti();
+}
+
+/* popup */
+function showLetter(){ popup.style.display="flex"; }
+function closeLetter(){ popup.style.display="none"; }
+
+/* share */
+function share(){
+  let text="Look what I made for you ❤️";
+  window.open(`https://t.me/share/url?url=${location.href}&text=${text}`);
+}
+
+/* confetti */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let pieces=[];
+
+function startConfetti(){
+ for(let i=0;i<120;i++){
+   pieces.push({
+     x:Math.random()*canvas.width,
+     y:Math.random()*canvas.height,
+     r:Math.random()*6+2,
+     dy:Math.random()*3+1
+   });
+ }
+ animate();
+}
+
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ pieces.forEach(p=>{
+   ctx.beginPath();
+   ctx.arc(p.x,p.y,p.r,0,6.28);
+   ctx.fillStyle="white";
+   ctx.fill();
+   p.y+=p.dy;
+   if(p.y>canvas.height) p.y=0;
+ });
+ requestAnimationFrame(animate);
+}
+</script>
+
+</body>
+</html>

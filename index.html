@@ -1,71 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Valentine Special ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Proposal ❤️</title>
 
 <style>
 body{
   margin:0;
-  background:black;
   overflow:hidden;
-  font-family:monospace;
-  color:white;
+  font-family:sans-serif;
+  background:linear-gradient(#ff9a9e,#fad0c4);
   text-align:center;
+  color:white;
 }
 
-/* heart container */
-.heart{
+/* sky stars */
+canvas{
+  position:fixed;
+  inset:0;
+}
+
+/* ground */
+.ground{
   position:absolute;
-  top:45%;
-  left:50%;
-  transform:translate(-50%,-50%) rotate(-45deg);
-  width:330px;
-  height:330px;
+  bottom:0;
+  width:100%;
+  height:140px;
+  background:#2d2d2d;
 }
 
-.word{
+/* characters */
+.char{
   position:absolute;
-  color:#ff8fb1;
-  font-size:14px;
-  text-shadow:0 0 10px #fff,0 0 20px #ff4b6e;
-  animation: float 3s infinite ease-in-out;
+  bottom:140px;
+  font-size:70px;
+  transition:all 1s ease;
 }
 
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
+#boy{ left:-100px; }
+#girl{ right:100px; }
 
-/* name */
-.names{
+/* text */
+#dialog{
   position:absolute;
   top:40px;
   width:100%;
-  font-size:22px;
+  font-size:28px;
   font-weight:bold;
-  color:#ff4b6e;
-  text-shadow:0 0 15px white;
+  text-shadow:0 0 10px #ff4b6e;
 }
 
 /* buttons */
-.controls{
+#buttons{
+  display:none;
   position:absolute;
   bottom:30px;
   width:100%;
 }
 
-input{
-  padding:8px;
-  border-radius:10px;
-  border:none;
-  width:110px;
-}
-
 button{
-  padding:10px 15px;
-  margin:5px;
+  padding:12px 18px;
+  margin:6px;
   border:none;
   border-radius:20px;
   background:#ff4b6e;
@@ -73,128 +69,127 @@ button{
   font-weight:bold;
 }
 
-/* popup */
-.popup{
-  position:fixed;
-  inset:0;
-  background:#000000cc;
-  display:none;
-  justify-content:center;
-  align-items:center;
+/* heart rain */
+.heart{
+  position:absolute;
+  font-size:22px;
+  animation:fall linear infinite;
 }
 
-.popup-box{
-  background:#ff4b6e;
-  padding:20px;
-  border-radius:15px;
-  max-width:260px;
-}
-canvas{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
+@keyframes fall{
+  from{transform:translateY(-20px)}
+  to{transform:translateY(100vh)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="names" id="names">❤️ Forever ❤️</div>
-<div class="heart" id="heart"></div>
+<canvas id="bg"></canvas>
 
-<div class="controls">
-  <input id="n1" placeholder="Your Name">
-  ❤️
-  <input id="n2" placeholder="Partner">
-  <br>
-  <button onclick="setNames()">Set Love</button>
-  <button onclick="showLetter()">Love Letter 💌</button>
-  <button onclick="share()">Share</button>
+<div id="dialog">A special moment...</div>
+
+<div id="boy" class="char">🚶‍♂️</div>
+<div id="girl" class="char">👧</div>
+
+<div class="ground"></div>
+
+<div id="buttons">
+  <button onclick="yes()">Yes ❤️</button>
+  <button onclick="no()">No 😜</button>
 </div>
 
-<div class="popup" id="popup">
-  <div class="popup-box">
-    <h3>💖 My Love Letter</h3>
-    <p>You are my world ❤️<br>I love you forever 🥰</p>
-    <button onclick="closeLetter()">Close</button>
-  </div>
-</div>
-
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8d2d7f7b8.mp3" type="audio/mpeg">
+<!-- music -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/02/10/audio_7e07b2c7a5.mp3">
 </audio>
 
-<canvas id="confetti"></canvas>
-
 <script>
-/* create heart words */
-const heart=document.getElementById("heart");
+const boy=document.getElementById("boy");
+const dialog=document.getElementById("dialog");
+const buttons=document.getElementById("buttons");
+const music=document.getElementById("music");
 
-function addWord(x,y){
-  let span=document.createElement("span");
-  span.className="word";
-  span.innerText="I love you";
-  span.style.left=x+"px";
-  span.style.top=y+"px";
-  heart.appendChild(span);
+/* cinematic steps */
+
+setTimeout(()=>{
+  dialog.innerText="He is coming for someone special ❤️";
+},1000);
+
+setTimeout(()=>{
+  boy.style.left="45%";   // walk
+},2000);
+
+setTimeout(()=>{
+  boy.innerText="🧎";     // kneel
+  dialog.innerText="Wait... 💍";
+},4500);
+
+setTimeout(()=>{
+  boy.innerText="🧎‍♂️💍";  // ring
+  dialog.innerText="Will you be mine forever? ❤️";
+  buttons.style.display="block";
+},6000);
+
+
+/* YES */
+function yes(){
+  music.play();
+  dialog.innerText="Yayyy ❤️ Together Forever 🥰";
+  boy.innerText="🤗";
+  girl.innerText="🤗";
+  heartRain();
 }
 
-for(let t=0;t<6.28;t+=0.08){
- let x=16*Math.pow(Math.sin(t),3);
- let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
- addWord(150+x*8,150+y*8);
+/* NO */
+function no(){
+  dialog.innerText="Think again 😜";
 }
 
-/* names */
-function setNames(){
-  let a=n1.value||"Me";
-  let b=n2.value||"You";
-  document.getElementById("names").innerText=a+" ❤️ "+b;
-  startConfetti();
+
+/* hearts rain */
+function heartRain(){
+  for(let i=0;i<50;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=2+Math.random()*3+"s";
+    document.body.appendChild(h);
+  }
 }
 
-/* popup */
-function showLetter(){ popup.style.display="flex"; }
-function closeLetter(){ popup.style.display="none"; }
 
-/* share */
-function share(){
-  let text="Look what I made for you ❤️";
-  window.open(`https://t.me/share/url?url=${location.href}&text=${text}`);
-}
-
-/* confetti */
-const canvas=document.getElementById("confetti");
+/* 🌟 fireworks particles background */
+const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 canvas.width=innerWidth;
 canvas.height=innerHeight;
 
-let pieces=[];
-
-function startConfetti(){
- for(let i=0;i<120;i++){
-   pieces.push({
-     x:Math.random()*canvas.width,
-     y:Math.random()*canvas.height,
-     r:Math.random()*6+2,
-     dy:Math.random()*3+1
-   });
- }
- animate();
+let stars=[];
+for(let i=0;i<120;i++){
+ stars.push({
+   x:Math.random()*canvas.width,
+   y:Math.random()*canvas.height,
+   r:Math.random()*2
+ });
 }
 
 function animate(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
- pieces.forEach(p=>{
+ ctx.fillStyle="white";
+
+ stars.forEach(s=>{
    ctx.beginPath();
-   ctx.arc(p.x,p.y,p.r,0,6.28);
-   ctx.fillStyle="white";
+   ctx.arc(s.x,s.y,s.r,0,6.28);
    ctx.fill();
-   p.y+=p.dy;
-   if(p.y>canvas.height) p.y=0;
+   s.y+=0.3;
+   if(s.y>canvas.height) s.y=0;
  });
+
  requestAnimationFrame(animate);
 }
+animate();
 </script>
 
 </body>

@@ -3,16 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movie Proposal ❤️</title>
+<title>Real Proposal ❤️</title>
 
 <style>
 body{
   margin:0;
   overflow:hidden;
   font-family:sans-serif;
-  background:linear-gradient(#ff9a9e,#fad0c4);
-  text-align:center;
-  color:white;
+  background:linear-gradient(#ff8fb1,#ff4b6e,#1a1a1a);
 }
 
 /* sky stars */
@@ -26,41 +24,85 @@ canvas{
   position:absolute;
   bottom:0;
   width:100%;
-  height:140px;
-  background:#2d2d2d;
+  height:160px;
+  background:#222;
 }
 
-/* characters */
-.char{
+/* characters (SVG look circles) */
+.character{
   position:absolute;
-  bottom:140px;
-  font-size:70px;
-  transition:all 1s ease;
+  bottom:160px;
+  width:70px;
+  height:120px;
 }
 
-#boy{ left:-100px; }
-#girl{ right:100px; }
+/* boy */
+#boy{
+  left:-120px;
+  animation: walk 4s forwards;
+}
 
-/* text */
+/* walking animation */
+@keyframes walk{
+  to{ left:45%; }
+}
+
+/* girl */
+#girl{
+  right:120px;
+}
+
+/* simple cartoon shapes */
+.head{
+  width:40px;
+  height:40px;
+  background:#ffd1a3;
+  border-radius:50%;
+  margin:auto;
+}
+
+.body{
+  width:40px;
+  height:60px;
+  background:#fff;
+  margin:auto;
+  border-radius:10px;
+}
+
+/* kneel */
+.kneel{
+  transform:scaleY(0.7) translateY(20px);
+}
+
+/* dialog */
 #dialog{
   position:absolute;
-  top:40px;
+  top:50px;
   width:100%;
+  text-align:center;
   font-size:28px;
-  font-weight:bold;
-  text-shadow:0 0 10px #ff4b6e;
+  color:white;
+  text-shadow:0 0 15px #ff4b6e;
+}
+
+/* ring */
+#ring{
+  position:absolute;
+  font-size:30px;
+  display:none;
 }
 
 /* buttons */
 #buttons{
   display:none;
   position:absolute;
-  bottom:30px;
+  bottom:40px;
   width:100%;
+  text-align:center;
 }
 
 button{
-  padding:12px 18px;
+  padding:12px 20px;
   margin:6px;
   border:none;
   border-radius:20px;
@@ -69,11 +111,11 @@ button{
   font-weight:bold;
 }
 
-/* heart rain */
+/* hearts */
 .heart{
   position:absolute;
+  animation: fall 4s linear infinite;
   font-size:22px;
-  animation:fall linear infinite;
 }
 
 @keyframes fall{
@@ -85,13 +127,23 @@ button{
 
 <body>
 
-<canvas id="bg"></canvas>
+<canvas id="stars"></canvas>
 
-<div id="dialog">A special moment...</div>
+<div id="dialog">A special evening...</div>
 
-<div id="boy" class="char">🚶‍♂️</div>
-<div id="girl" class="char">👧</div>
+<!-- boy -->
+<div id="boy" class="character">
+  <div class="head"></div>
+  <div class="body"></div>
+</div>
 
+<!-- girl -->
+<div id="girl" class="character">
+  <div class="head"></div>
+  <div class="body" style="background:pink"></div>
+</div>
+
+<div id="ring">💍</div>
 <div class="ground"></div>
 
 <div id="buttons">
@@ -99,7 +151,6 @@ button{
   <button onclick="no()">No 😜</button>
 </div>
 
-<!-- music -->
 <audio id="music" loop>
   <source src="https://cdn.pixabay.com/download/audio/2023/02/10/audio_7e07b2c7a5.mp3">
 </audio>
@@ -107,89 +158,74 @@ button{
 <script>
 const boy=document.getElementById("boy");
 const dialog=document.getElementById("dialog");
+const ring=document.getElementById("ring");
 const buttons=document.getElementById("buttons");
 const music=document.getElementById("music");
 
-/* cinematic steps */
+/* cinematic sequence */
 
 setTimeout(()=>{
-  dialog.innerText="He is coming for someone special ❤️";
-},1000);
+  dialog.innerText="He walks towards her ❤️";
+},1500);
 
 setTimeout(()=>{
-  boy.style.left="45%";   // walk
-},2000);
-
-setTimeout(()=>{
-  boy.innerText="🧎";     // kneel
-  dialog.innerText="Wait... 💍";
+  boy.classList.add("kneel");
+  dialog.innerText="He kneels down...";
 },4500);
 
 setTimeout(()=>{
-  boy.innerText="🧎‍♂️💍";  // ring
+  ring.style.display="block";
+  ring.style.left="50%";
+  ring.style.bottom="230px";
   dialog.innerText="Will you be mine forever? ❤️";
   buttons.style.display="block";
 },6000);
 
-
-/* YES */
+/* yes */
 function yes(){
   music.play();
-  dialog.innerText="Yayyy ❤️ Together Forever 🥰";
-  boy.innerText="🤗";
-  girl.innerText="🤗";
+  dialog.innerText="Together Forever 🥰";
   heartRain();
 }
 
-/* NO */
+/* no */
 function no(){
-  dialog.innerText="Think again 😜";
+  dialog.innerText="Try again 😜";
 }
 
-
-/* hearts rain */
+/* hearts */
 function heartRain(){
-  for(let i=0;i<50;i++){
+  for(let i=0;i<40;i++){
     let h=document.createElement("div");
     h.className="heart";
     h.innerText="❤️";
     h.style.left=Math.random()*100+"vw";
-    h.style.animationDuration=2+Math.random()*3+"s";
     document.body.appendChild(h);
   }
 }
 
+/* stars background */
+const c=document.getElementById("stars");
+const ctx=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
 
-/* 🌟 fireworks particles background */
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-let stars=[];
+let s=[];
 for(let i=0;i<120;i++){
- stars.push({
-   x:Math.random()*canvas.width,
-   y:Math.random()*canvas.height,
-   r:Math.random()*2
- });
+  s.push({x:Math.random()*c.width,y:Math.random()*c.height});
 }
 
-function animate(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
+function anim(){
+ ctx.clearRect(0,0,c.width,c.height);
  ctx.fillStyle="white";
-
- stars.forEach(s=>{
-   ctx.beginPath();
-   ctx.arc(s.x,s.y,s.r,0,6.28);
-   ctx.fill();
-   s.y+=0.3;
-   if(s.y>canvas.height) s.y=0;
+ s.forEach(p=>{
+   ctx.fillRect(p.x,p.y,2,2);
+   p.y+=0.3;
+   if(p.y>c.height)p.y=0;
  });
-
- requestAnimationFrame(animate);
+ requestAnimationFrame(anim);
 }
-animate();
+anim();
 </script>
 
 </body>

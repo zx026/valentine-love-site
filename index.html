@@ -2,231 +2,85 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real Proposal ❤️</title>
+<title>Happy Rose Day</title>
 
 <style>
 body{
   margin:0;
+  padding:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  flex-direction:column;
   overflow:hidden;
-  font-family:sans-serif;
-  background:linear-gradient(#ff8fb1,#ff4b6e,#1a1a1a);
+  font-family:monospace;
 }
 
-/* sky stars */
-canvas{
-  position:fixed;
-  inset:0;
+/* Rose Shape */
+.rose{
+  position:relative;
+  width:150px;
+  height:150px;
+  animation: bloom 3s infinite alternate;
 }
 
-/* ground */
-.ground{
+.petal{
   position:absolute;
-  bottom:0;
-  width:100%;
-  height:160px;
-  background:#222;
-}
-
-/* characters (SVG look circles) */
-.character{
-  position:absolute;
-  bottom:160px;
-  width:70px;
+  width:80px;
   height:120px;
+  background:red;
+  border-radius:50% 50% 0 0;
+  transform-origin:bottom center;
+  box-shadow:0 0 20px crimson;
 }
 
-/* boy */
-#boy{
-  left:-120px;
-  animation: walk 4s forwards;
+.p1{ transform:rotate(0deg) translateY(-20px);}
+.p2{ transform:rotate(45deg) translateY(-20px);}
+.p3{ transform:rotate(90deg) translateY(-20px);}
+.p4{ transform:rotate(135deg) translateY(-20px);}
+.p5{ transform:rotate(180deg) translateY(-20px);}
+.p6{ transform:rotate(225deg) translateY(-20px);}
+.p7{ transform:rotate(270deg) translateY(-20px);}
+.p8{ transform:rotate(315deg) translateY(-20px);}
+
+@keyframes bloom{
+  0%{ transform:scale(0.8) rotate(0deg);}
+  100%{ transform:scale(1.1) rotate(10deg);}
 }
 
-/* walking animation */
-@keyframes walk{
-  to{ left:45%; }
-}
-
-/* girl */
-#girl{
-  right:120px;
-}
-
-/* simple cartoon shapes */
-.head{
-  width:40px;
-  height:40px;
-  background:#ffd1a3;
-  border-radius:50%;
-  margin:auto;
-}
-
-.body{
-  width:40px;
-  height:60px;
-  background:#fff;
-  margin:auto;
-  border-radius:10px;
-}
-
-/* kneel */
-.kneel{
-  transform:scaleY(0.7) translateY(20px);
-}
-
-/* dialog */
-#dialog{
-  position:absolute;
-  top:50px;
-  width:100%;
-  text-align:center;
+.text{
+  color:white;
+  margin-top:40px;
   font-size:28px;
-  color:white;
-  text-shadow:0 0 15px #ff4b6e;
+  text-shadow:0 0 20px red;
+  animation: glow 2s infinite alternate;
 }
 
-/* ring */
-#ring{
-  position:absolute;
-  font-size:30px;
-  display:none;
-}
-
-/* buttons */
-#buttons{
-  display:none;
-  position:absolute;
-  bottom:40px;
-  width:100%;
-  text-align:center;
-}
-
-button{
-  padding:12px 20px;
-  margin:6px;
-  border:none;
-  border-radius:20px;
-  background:#ff4b6e;
-  color:white;
-  font-weight:bold;
-}
-
-/* hearts */
-.heart{
-  position:absolute;
-  animation: fall 4s linear infinite;
-  font-size:22px;
-}
-
-@keyframes fall{
-  from{transform:translateY(-20px)}
-  to{transform:translateY(100vh)}
+@keyframes glow{
+  0%{opacity:0.6;}
+  100%{opacity:1;}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="stars"></canvas>
-
-<div id="dialog">A special evening...</div>
-
-<!-- boy -->
-<div id="boy" class="character">
-  <div class="head"></div>
-  <div class="body"></div>
+<div class="rose">
+  <div class="petal p1"></div>
+  <div class="petal p2"></div>
+  <div class="petal p3"></div>
+  <div class="petal p4"></div>
+  <div class="petal p5"></div>
+  <div class="petal p6"></div>
+  <div class="petal p7"></div>
+  <div class="petal p8"></div>
 </div>
 
-<!-- girl -->
-<div id="girl" class="character">
-  <div class="head"></div>
-  <div class="body" style="background:pink"></div>
+<div class="text">
+  Happy Rose Day ❤️
 </div>
-
-<div id="ring">💍</div>
-<div class="ground"></div>
-
-<div id="buttons">
-  <button onclick="yes()">Yes ❤️</button>
-  <button onclick="no()">No 😜</button>
-</div>
-
-<audio id="music" loop>
-  <source src="https://cdn.pixabay.com/download/audio/2023/02/10/audio_7e07b2c7a5.mp3">
-</audio>
-
-<script>
-const boy=document.getElementById("boy");
-const dialog=document.getElementById("dialog");
-const ring=document.getElementById("ring");
-const buttons=document.getElementById("buttons");
-const music=document.getElementById("music");
-
-/* cinematic sequence */
-
-setTimeout(()=>{
-  dialog.innerText="He walks towards her ❤️";
-},1500);
-
-setTimeout(()=>{
-  boy.classList.add("kneel");
-  dialog.innerText="He kneels down...";
-},4500);
-
-setTimeout(()=>{
-  ring.style.display="block";
-  ring.style.left="50%";
-  ring.style.bottom="230px";
-  dialog.innerText="Will you be mine forever? ❤️";
-  buttons.style.display="block";
-},6000);
-
-/* yes */
-function yes(){
-  music.play();
-  dialog.innerText="Together Forever 🥰";
-  heartRain();
-}
-
-/* no */
-function no(){
-  dialog.innerText="Try again 😜";
-}
-
-/* hearts */
-function heartRain(){
-  for(let i=0;i<40;i++){
-    let h=document.createElement("div");
-    h.className="heart";
-    h.innerText="❤️";
-    h.style.left=Math.random()*100+"vw";
-    document.body.appendChild(h);
-  }
-}
-
-/* stars background */
-const c=document.getElementById("stars");
-const ctx=c.getContext("2d");
-c.width=innerWidth;
-c.height=innerHeight;
-
-let s=[];
-for(let i=0;i<120;i++){
-  s.push({x:Math.random()*c.width,y:Math.random()*c.height});
-}
-
-function anim(){
- ctx.clearRect(0,0,c.width,c.height);
- ctx.fillStyle="white";
- s.forEach(p=>{
-   ctx.fillRect(p.x,p.y,2,2);
-   p.y+=0.3;
-   if(p.y>c.height)p.y=0;
- });
- requestAnimationFrame(anim);
-}
-anim();
-</script>
 
 </body>
 </html>
